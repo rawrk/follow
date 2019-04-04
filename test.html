@@ -1,28 +1,75 @@
 <html>
 <!-- Ugly Follower code -->
-<script src="..\temp.js"></script>
-<script src=".\lib\jquery.js"></script>
-<script>
-<!-- TODO: Twitch provides a list of most recent follows | most recent follow first -->
-<!-- TODO: Auth token > Ajax > post server and get a response -->
-<!-- TODO: Present response data -->
-<!-- Stack > pop the followers -->
-var test = 'Hello World!';
-console.log(test);
-window.onload = function(e) { 
-	document.getElementById("access_token").innerHTML=auth.access_token;
-	document.getElementById("refresh_token").innerHTML=auth.refresh_token;
-	document.getElementById("expires_in").innerHTML=auth.expires_in;
-	document.getElementById("scope").innerHTML=auth.scope;
-	document.getElementById("token_type").innerHTML=auth.token_type;
-}
-</script>
+<header>
+    <!-- <script src="..\temp.js"></script> -->
+    <script src="..\dontshow.js"></script>
+    <script src=".\lib\jquery.js"></script>
+</header>
 
-<p id="access_token"></p>
-<p id="refresh_token"></p>
-<p id="expires_in"></p>
-<p id="scope"></p>
-<p id="token_type"></p>
+<body>
+    
+    <span>Client ID: <input id="client_id" type="password"/></span><br />
+    <span>Client Secret: <input id="client_secret" type="password" /></span><br />
+    <input id="work" type="button" value="Submit" />
 
+    <input id="data" type="hidden" />
+
+    <script> 
+        var test;  
+        var appPost = 
+        'https://id.twitch.tv/oauth2/token?client_id='+document.getElementById("client_id").value
+            +'&client_secret='+document.getElementById("client_secret").value
+            +"&grant_type=client_credentials";
+
+        function creds() {
+            console.log("Test - "+document.getElementById("client_id").value);
+            console.log(document.getElementById("client_secret").value);
+        }
+
+        $( "#work" ).click(function() {//TODO: First phase of OAUTH
+            creds();
+            alert("work");
+            // https://id.twitch.tv/oauth2/authorize?response_type=token&client_id=uo6dggojyb8d6soh92zknwmi5ej1q2&redirect_uri=http://localhost&scope=viewing_activity_read&state=c3ab8aa609ea11e793ae92361f002671
+            $.ajax({
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                url: "https://id.twitch.tv/oauth2/authorize",
+                dataType: "json",
+                data: {
+                    response_type: 'token',
+                    client_secret: document.getElementById("client_id").value,
+                    grant_type: "client_credentials"
+                },
+                type: "GET",
+                success: function(response) {
+                    token = response.access_token;
+                    expiresIn = response.expires_in;
+                },
+                error: function(errorThrown) {
+                    alert(errorThrown.error);
+                }
+            });
+
+            $.ajax({//TODO: Second phase of OAUTH
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                url: "https://id.twitch.tv/oauth2/token",
+                dataType: "json",
+                data: {
+                    client_id: document.getElementById("client_secret").value,
+                    client_secret: document.getElementById("client_id").value,
+                    grant_type: "client_credentials"
+                },
+                type: "POST",
+                success: function(response) {
+                    token = response.access_token;
+                    expiresIn = response.expires_in;
+                },
+                error: function(errorThrown) {
+                    alert(errorThrown.error);
+                }
+            });
+        });
+        
+    </script>
+</body>
 </html>
 
