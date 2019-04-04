@@ -1,0 +1,28 @@
+<html>
+<!-- Ugly Follower code -->
+<script src="..\temp.js"></script>
+<script src=".\lib\jquery.js"></script>
+<script>
+<!-- TODO: Twitch provides a list of most recent follows | most recent follow first -->
+<!-- TODO: Auth token > Ajax > post server and get a response -->
+<!-- TODO: Present response data -->
+<!-- Stack > pop the followers -->
+var test = 'Hello World!';
+console.log(test);
+window.onload = function(e) { 
+	document.getElementById("access_token").innerHTML=auth.access_token;
+	document.getElementById("refresh_token").innerHTML=auth.refresh_token;
+	document.getElementById("expires_in").innerHTML=auth.expires_in;
+	document.getElementById("scope").innerHTML=auth.scope;
+	document.getElementById("token_type").innerHTML=auth.token_type;
+}
+</script>
+
+<p id="access_token"></p>
+<p id="refresh_token"></p>
+<p id="expires_in"></p>
+<p id="scope"></p>
+<p id="token_type"></p>
+
+</html>
+
